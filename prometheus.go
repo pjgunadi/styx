@@ -123,7 +123,8 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, query s
 	caCertPool.AppendCertsFromPEM(caCert)
 
 	//Request
-	req, err := http.NewRequest("GET", u.String(), '')
+	data := []byte
+	req, err := http.NewRequest("GET", u.String(), bytes.NewBuffer(data))
 	if err != nil {
 		log.Fatal("Error reading request. ", err)
 	}
