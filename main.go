@@ -33,6 +33,17 @@ func main() {
 			Value:       "http://localhost:9090",
 			Destination: &flag.Prometheus,
 		},
+		cli.BoolTFlag{
+			Name:        "icp",
+			Usage:       "ICP Prometheus flag",
+			Value:       false,
+			Destination: &flag.Icp,
+		},
+		cli.StringFlag{
+			Name:        "token",
+			Value:       "",
+			Destination: &flag.Token,
+		},
 	}
 
 	app.Commands = []cli.Command{{
@@ -90,6 +101,8 @@ type flags struct {
 	Duration   time.Duration
 	Header     bool
 	Prometheus string
+	Icp        bool
+	Token      string
 }
 
 var flag flags
@@ -102,7 +115,11 @@ func exportAction(c *cli.Context) error {
 	end := time.Now()
 	start := end.Add(-1 * flag.Duration)
 
-	results, err := Query(flag.Prometheus, start, end, c.Args().First())
+	if flag.Icp {
+		results, err := IcpQuery(flag.Prometheus, flag.Prefix, flag.Token, start, end, c.Args().First())
+	} else {
+		results, err := Query(flag.Prometheus, start, end, c.Args().First())
+	}
 	if err != nil {
 		return err
 	}
