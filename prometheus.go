@@ -37,7 +37,7 @@ func Query(host string, start time.Time, end time.Time, query string) ([]Result,
 	if err != nil {
 		return nil, err
 	}
-	u.Path = "/api/v1/query_range"
+	u.Path = "prometheus/api/v1/query_range"
 	q := u.Query()
 	q.Set("query", query)
 	q.Set("start", fmt.Sprintf("%d", start.Unix()))
