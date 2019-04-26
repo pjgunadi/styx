@@ -1,8 +1,12 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"sort"
@@ -41,7 +45,22 @@ func Query(host string, start time.Time, end time.Time, query string) ([]Result,
 	q.Set("step", fmt.Sprintf("%d", steps(end.Sub(start))))
 	u.RawQuery = q.Encode()
 
-	response, err := http.Get(u.String())
+	caCert, err := ioutil.ReadFile("cert.crt")
+	if err != null {
+		log.Fatal(err)
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				RootCAs: caCertPool,
+			},
+		},
+	}
+	//	response, err := http.Get(u.String())
+	response, err := client.Get(u.String())
 	if err != nil {
 		return nil, err
 	}
