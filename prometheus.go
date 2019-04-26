@@ -124,7 +124,7 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, query s
 
 	//Request
 	req, err := http.NewRequest("GET", u.String(), '')
-	if err != nul {
+	if err != nil {
 		log.Fatal("Error reading request. ", err)
 	}
 

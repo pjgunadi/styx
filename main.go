@@ -116,7 +116,7 @@ func exportAction(c *cli.Context) error {
 	start := end.Add(-1 * flag.Duration)
 
 	if flag.Icp {
-		results, err := IcpQuery(flag.Prometheus, flag.Prefix, flag.Token, start, end, c.Args().First())
+		results, err := IcpQuery(flag.Prometheus, flag.Token, start, end, c.Args().First())
 	} else {
 		results, err := Query(flag.Prometheus, start, end, c.Args().First())
 	}
