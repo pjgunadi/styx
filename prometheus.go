@@ -46,7 +46,7 @@ func Query(host string, start time.Time, end time.Time, query string) ([]Result,
 	u.RawQuery = q.Encode()
 
 	caCert, err := ioutil.ReadFile("cert.crt")
-	if err != null {
+	if err != nil {
 		log.Fatal(err)
 	}
 	caCertPool := x509.NewCertPool()
