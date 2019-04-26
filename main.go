@@ -36,7 +36,6 @@ func main() {
 		cli.BoolTFlag{
 			Name:        "icp",
 			Usage:       "ICP Prometheus flag",
-			Value:       false,
 			Destination: &flag.Icp,
 		},
 		cli.StringFlag{
@@ -117,19 +116,29 @@ func exportAction(c *cli.Context) error {
 
 	if flag.Icp {
 		results, err := IcpQuery(flag.Prometheus, flag.Token, start, end, c.Args().First())
-	} else {
-		results, err := Query(flag.Prometheus, start, end, c.Args().First())
-	}
-	if err != nil {
-		return err
-	}
-
-	// Only add a line as header when the flag is true, which is the default
-	if flag.Header {
-		if err := csvHeaderWriter(os.Stdout, results); err != nil {
+		if err != nil {
 			return err
 		}
-	}
 
-	return csvWriter(os.Stdout, results)
+		// Only add a line as header when the flag is true, which is the default
+		if flag.Header {
+			if err := csvHeaderWriter(os.Stdout, results); err != nil {
+				return err
+			}
+		}
+		return csvWriter(os.Stdout, results)
+	} else {
+		results, err := Query(flag.Prometheus, start, end, c.Args().First())
+		if err != nil {
+			return err
+		}
+
+		// Only add a line as header when the flag is true, which is the default
+		if flag.Header {
+			if err := csvHeaderWriter(os.Stdout, results); err != nil {
+				return err
+			}
+		}
+		return csvWriter(os.Stdout, results)
+	}
 }

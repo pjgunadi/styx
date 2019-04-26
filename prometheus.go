@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -124,8 +123,7 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, query s
 	caCertPool.AppendCertsFromPEM(caCert)
 
 	//Request
-	data := []byte
-	req, err := http.NewRequest("GET", u.String(), bytes.NewBuffer(data))
+	req, err := http.NewRequest("GET", u.String(), strings.NewReader(""))
 	if err != nil {
 		log.Fatal("Error reading request. ", err)
 	}
@@ -141,7 +139,7 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, query s
 			},
 		},
 	}
-	
+
 	//	response, err := http.Get(u.String())
 	response, err := client.Do(req)
 	if err != nil {
