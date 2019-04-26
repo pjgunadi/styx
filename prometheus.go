@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
