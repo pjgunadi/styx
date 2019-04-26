@@ -33,7 +33,7 @@ func main() {
 			Value:       "http://localhost:9090",
 			Destination: &flag.Prometheus,
 		},
-		cli.BoolTFlag{
+		cli.BoolFlag{
 			Name:        "icp",
 			Usage:       "ICP Prometheus flag",
 			Destination: &flag.Icp,
@@ -115,7 +115,7 @@ func exportAction(c *cli.Context) error {
 	start := end.Add(-1 * flag.Duration)
 
 	if flag.Icp == true {
-		log.Println("Executing ICP Query")
+		//log.Println("Executing ICP Query")
 		results, err := IcpQuery(flag.Prometheus, flag.Token, start, end, c.Args().First())
 		if err != nil {
 			return err
