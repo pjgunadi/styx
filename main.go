@@ -76,7 +76,7 @@ func main() {
 				Name:        "step",
 				Usage:       "The step of query range",
 				Value:       0,
-				Destination: &flag.Step,
+				Destination: &gnuplotFlag.Step,
 			},
 		},
 	}, {
@@ -104,7 +104,7 @@ func main() {
 				Name:        "step",
 				Usage:       "The step of query range",
 				Value:       0,
-				Destination: &flag.Step,
+				Destination: &matplotlibFlag.Step,
 			},
 		},
 	}}
@@ -148,7 +148,7 @@ func exportAction(c *cli.Context) error {
 		}
 		return csvWriter(os.Stdout, results)
 	} else {
-		results, err := Query(flag.Prometheus, start, end, flag.Step.Seconds, c.Args().First())
+		results, err := Query(flag.Prometheus, start, end, int(flag.Step.Seconds), c.Args().First())
 		if err != nil {
 			return err
 		}
