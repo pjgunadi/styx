@@ -43,6 +43,12 @@ func main() {
 			Value:       "",
 			Destination: &flag.Token,
 		},
+		cli.DurationFlag{
+			Name:        "step",
+			Usage:       "The step of query range",
+			Value:       0,
+			Destination: &flag.Step,
+		},
 	}
 
 	app.Commands = []cli.Command{{
@@ -98,6 +104,7 @@ func main() {
 
 type flags struct {
 	Duration   time.Duration
+	Step       time.Duration
 	Header     bool
 	Prometheus string
 	Icp        bool
@@ -116,7 +123,7 @@ func exportAction(c *cli.Context) error {
 
 	if flag.Icp == true {
 		//log.Println("Executing ICP Query")
-		results, err := IcpQuery(flag.Prometheus, flag.Token, start, end, c.Args().First())
+		results, err := IcpQuery(flag.Prometheus, flag.Token, start, end, flag.Step, c.Args().First())
 		if err != nil {
 			return err
 		}
@@ -129,7 +136,7 @@ func exportAction(c *cli.Context) error {
 		}
 		return csvWriter(os.Stdout, results)
 	} else {
-		results, err := Query(flag.Prometheus, start, end, c.Args().First())
+		results, err := Query(flag.Prometheus, start, end, flag.Step, c.Args().First())
 		if err != nil {
 			return err
 		}
