@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"io"
 	"sort"
+	"strconv"
 	"strings"
+	"time"
 )
 
 func csvWriter(w io.Writer, results []Result) error {
@@ -15,25 +17,27 @@ func csvWriter(w io.Writer, results []Result) error {
 	// Deduplicate all times from all results by passing them as key into a map.
 	timesMap := make(map[string]bool)
 	for _, result := range results {
-		for time := range result.Values {
-			timesMap[time] = true
+		for tm := range result.Values {
+			timesMap[tm] = true
 		}
 	}
 
 	// Create a sorted slice of all times to iterate over later.
 	var times []string
-	for time := range timesMap {
-		times = append(times, time)
+	for tm := range timesMap {
+		times = append(times, tm)
 	}
 	sort.Slice(times, func(i, j int) bool {
 		return times[i] < times[j]
 	})
 
 	// Iterate over all times and find the belonging values for each result.
-	for _, time := range times {
-		fmt.Fprint(w, time)
+	for _, tm := range times {
+		i64, err := strconv.ParseInt(tm, 10, 64)
+		uxdate := time.Unix(i64, 0).String()
+		fmt.Fprint(w, uxdate)
 		for _, result := range results {
-			fmt.Fprint(w, ","+result.Values[time])
+			fmt.Fprint(w, ","+result.Values[tm])
 		}
 		fmt.Fprintln(w)
 	}
@@ -63,15 +67,15 @@ func matplotlibWriter(w io.Writer, results []Result) error {
 	// Deduplicate all times from all results by passing them as key into a map.
 	timesMap := make(map[string]bool)
 	for _, result := range results {
-		for time := range result.Values {
-			timesMap[time] = true
+		for tm := range result.Values {
+			timesMap[tm] = true
 		}
 	}
 
 	// Create a sorted slice of all times to iterate over later.
 	var times []string
-	for time := range timesMap {
-		times = append(times, time)
+	for tm := range timesMap {
+		times = append(times, tm)
 	}
 	sort.Slice(times, func(i, j int) bool {
 		return times[i] < times[j]
@@ -81,8 +85,8 @@ func matplotlibWriter(w io.Writer, results []Result) error {
 
 	for i, result := range results {
 		var vals []string
-		for _, time := range times {
-			if val, ok := result.Values[time]; ok {
+		for _, tm := range times {
+			if val, ok := result.Values[tm]; ok {
 				vals = append(vals, val)
 			} else {
 				vals = append(vals, "None")
