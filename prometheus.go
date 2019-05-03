@@ -185,7 +185,8 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, step ti
 
 func steps(step time.Duration, dur time.Duration) int {
 	if step > 0 {
-		return int(step.Nanoseconds / 1000000)
+		var istep int = int(step.Seconds)
+		return istep
 	}
 	if dur < 15*time.Minute {
 		return 1
