@@ -32,7 +32,7 @@ type Result struct {
 	Values map[string]string
 }
 
-func Query(host string, start time.Time, end time.Time, step int, query string) ([]Result, error) {
+func Query(host string, start time.Time, end time.Time, step time.Duration, query string) ([]Result, error) {
 	u, err := url.Parse(host)
 	if err != nil {
 		return nil, err
@@ -102,7 +102,7 @@ func Query(host string, start time.Time, end time.Time, step int, query string) 
 	return results, nil
 }
 
-func IcpQuery(host string, token string, start time.Time, end time.Time, step int, query string) ([]Result, error) {
+func IcpQuery(host string, token string, start time.Time, end time.Time, step time.Duration, query string) ([]Result, error) {
 	u, err := url.Parse(host)
 	if err != nil {
 		return nil, err
@@ -183,9 +183,9 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, step in
 	return results, nil
 }
 
-func steps(step int, dur time.Duration) int {
+func steps(step time.Duration, dur time.Duration) int {
 	if step > 0 {
-		return step
+		return int(step.Nanoseconds / 1000000)
 	}
 	if dur < 15*time.Minute {
 		return 1

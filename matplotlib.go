@@ -27,7 +27,7 @@ func matplotlibAction(c *cli.Context) error {
 	end := time.Now()
 	start := end.Add(-1 * matplotlibFlag.Duration)
 
-	results, err := Query(matplotlibFlag.Prometheus, start, end, int(matplotlibFlag.Step.Seconds), c.Args().First())
+	results, err := Query(matplotlibFlag.Prometheus, start, end, matplotlibFlag.Step, c.Args().First())
 	if err != nil {
 		return err
 	}
