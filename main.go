@@ -72,6 +72,12 @@ func main() {
 				Usage:       "Give the gnuplot graph a title",
 				Destination: &gnuplotFlag.Title,
 			},
+			cli.DurationFlag{
+				Name:        "step",
+				Usage:       "The step of query range",
+				Value:       0,
+				Destination: &flag.Step,
+			},
 		},
 	}, {
 		Name:   "matplotlib",
@@ -93,6 +99,12 @@ func main() {
 				Name:        "title",
 				Usage:       "Give the gnuplot graph a title",
 				Destination: &matplotlibFlag.Title,
+			},
+			cli.DurationFlag{
+				Name:        "step",
+				Usage:       "The step of query range",
+				Value:       0,
+				Destination: &flag.Step,
 			},
 		},
 	}}

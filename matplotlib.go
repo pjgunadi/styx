@@ -14,6 +14,7 @@ type matplotlibFlags struct {
 	Duration   time.Duration
 	Prometheus string
 	Title      string
+	Step       time.Duration
 }
 
 var matplotlibFlag matplotlibFlags
@@ -26,7 +27,7 @@ func matplotlibAction(c *cli.Context) error {
 	end := time.Now()
 	start := end.Add(-1 * matplotlibFlag.Duration)
 
-	results, err := Query(matplotlibFlag.Prometheus, start, end, 0, c.Args().First())
+	results, err := Query(matplotlibFlag.Prometheus, start, end, matplotlibFlags.Step.Seconds, c.Args().First())
 	if err != nil {
 		return err
 	}

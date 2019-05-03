@@ -183,7 +183,7 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, step in
 	return results, nil
 }
 
-func steps(step time.Duration, dur time.Duration) int {
+func steps(step int, dur time.Duration) int {
 	if step > 0 {
 		return step
 	}
