@@ -33,7 +33,7 @@ func csvWriter(w io.Writer, results []Result) error {
 
 	// Iterate over all times and find the belonging values for each result.
 	for _, tm := range times {
-		i64, err := strconv.ParseInt(tm, 10, 64)
+		i64, _ := strconv.ParseInt(tm, 10, 64)
 		uxdate := time.Unix(i64, 0).String()
 		fmt.Fprint(w, uxdate)
 		for _, result := range results {
