@@ -132,11 +132,11 @@ func exportAction(c *cli.Context) error {
 
 	end := time.Now()
 	start := end.Add(-1 * flag.Duration)
-	steps := int(flag.Step.Seconds())
+	step := int(flag.Step.Seconds())
 
 	if flag.Icp == true {
 		//log.Println("Executing ICP Query")
-		results, err := IcpQuery(flag.Prometheus, flag.Token, start, end, c.Args().First())
+		results, err := IcpQuery(flag.Prometheus, flag.Token, start, end, step, c.Args().First())
 		if err != nil {
 			return err
 		}
@@ -149,7 +149,7 @@ func exportAction(c *cli.Context) error {
 		}
 		return csvWriter(os.Stdout, results)
 	} else {
-		results, err := Query(flag.Prometheus, start, end, c.Args().First())
+		results, err := Query(flag.Prometheus, start, end, step, c.Args().First())
 		if err != nil {
 			return err
 		}

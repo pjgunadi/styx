@@ -32,7 +32,7 @@ type Result struct {
 	Values map[string]string
 }
 
-func Query(host string, start time.Time, end time.Time, query string) ([]Result, error) {
+func Query(host string, start time.Time, end time.Time, step int, query string) ([]Result, error) {
 	u, err := url.Parse(host)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func Query(host string, start time.Time, end time.Time, query string) ([]Result,
 	q.Set("query", query)
 	q.Set("start", fmt.Sprintf("%d", start.Unix()))
 	q.Set("end", fmt.Sprintf("%d", end.Unix()))
-	q.Set("step", fmt.Sprintf("%d", steps(end.Sub(start))))
+	q.Set("step", fmt.Sprintf("%d", steps(end.Sub(start), step)))
 	u.RawQuery = q.Encode()
 
 	caCert, err := ioutil.ReadFile("cert.crt")
@@ -102,7 +102,7 @@ func Query(host string, start time.Time, end time.Time, query string) ([]Result,
 	return results, nil
 }
 
-func IcpQuery(host string, token string, start time.Time, end time.Time, query string) ([]Result, error) {
+func IcpQuery(host string, token string, start time.Time, end time.Time, step int, query string) ([]Result, error) {
 	u, err := url.Parse(host)
 	if err != nil {
 		return nil, err
@@ -112,7 +112,7 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, query s
 	q.Set("query", query)
 	q.Set("start", fmt.Sprintf("%d", start.Unix()))
 	q.Set("end", fmt.Sprintf("%d", end.Unix()))
-	q.Set("step", fmt.Sprintf("%d", steps(end.Sub(start))))
+	q.Set("step", fmt.Sprintf("%d", steps(end.Sub(start), step)))
 	u.RawQuery = q.Encode()
 
 	caCert, err := ioutil.ReadFile("cert.crt")
@@ -183,7 +183,10 @@ func IcpQuery(host string, token string, start time.Time, end time.Time, query s
 	return results, nil
 }
 
-func steps(dur time.Duration) int {
+func steps(dur time.Duration, s int) int {
+	if s > 0 {
+		return s
+	}
 	if dur < 15*time.Minute {
 		return 1
 	}
