@@ -132,6 +132,7 @@ func exportAction(c *cli.Context) error {
 
 	end := time.Now()
 	start := end.Add(-1 * flag.Duration)
+	steps := int(flag.Step.Seconds())
 
 	if flag.Icp == true {
 		//log.Println("Executing ICP Query")
